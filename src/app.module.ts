@@ -23,7 +23,7 @@ import * as winston from 'winston';
 
       database: 'nest',
 
-      entities: [user, Employee],
+      entities: [],
 
       synchronize: false,
     }),
