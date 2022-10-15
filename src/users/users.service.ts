@@ -6,38 +6,83 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { Users } from './entities/user.entity';
 
 @Injectable()
-
 export class UsersService {
-constructor(@InjectRepository(Users) 
-private rep:Repository<Users>){
+  constructor(
+    @InjectRepository(Users)
+    private rep: Repository<Users>,
+  ) {}
 
-}
+  async postUser(createUserDto: CreateUserDto) {
+    let findUser = await this.rep.findOne({
+      select: ['id', 'name', 'isActive'],
+      where: {
+        name: createUserDto.name,
+      },
+    });
+    let data = {
+      name: createUserDto.name,
+    };
+    console.log(findUser);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    if (findUser == undefined) {
+      let save = await this.rep.save(data);
+      return {
+        success: true,
+        data: save,
+        message: 'successfully user inserted',
+      };
+    } else {
+      return {
+        success: false,
+        message: 'user already exists',
+      };
+    }
   }
 
-  findAll() {
-    return `This action returns all users`;
+  async findUsers() {
+    let find = await this.rep.find();
+    console.log(find);
+
+    if (find) {
+      return {
+        success: true,
+        data: find,
+        message: 'values are get',
+      };
+    } else {
+      return {
+        success: true,
+        message: 'error in servive file',
+      };
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(id: number) {
+    let find = await this.rep.findOne({
+      select: ['id', 'name', 'isActive'],
+
+      where: { id: id },
+    });
+
+    console.log('--------------------->', find);
+
+    if (find) {
+      return {
+        success: true,
+
+        data: find,
+
+        message: 'value get',
+      };
+    } else {
+      return {
+        success: true,
+
+        message: 'someting went wrong',
+      };
+    }
+  }
+   
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {

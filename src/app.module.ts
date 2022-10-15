@@ -37,7 +37,7 @@ import { Users } from './users/entities/user.entity';
 
      entities:[Users],
 
-      synchronize: true,
+      synchronize: false,
     }),
     
     WinstonModule.forRoot({
