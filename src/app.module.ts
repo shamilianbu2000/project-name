@@ -1,15 +1,27 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+// import { CommoentModule } from './commoent/commoent.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+// import { user } from './commoent/entities/commoent.entity';
 import { Repository } from 'typeorm';
+import { UsersModule } from "./users/users.module";
+// import { EmployeeModule } from './employee/employee.module';
+// import { Employee } from './employee/entities/employee.entity';
 import { WinstonModule } from 'nest-winston';
-import { UserModule } from './user/user.module';
+
 import * as winston from 'winston';
+import { Users } from './users/entities/user.entity';
+
+
+
 
 @Module({
+
+
+
   imports: [
-    UserModule,
+    
     TypeOrmModule.forRoot({
       type: 'mysql',
 
@@ -23,10 +35,11 @@ import * as winston from 'winston';
 
       database: 'nest',
 
-      entities: [],
+     entities:[Users],
 
-      synchronize: false,
+      synchronize: true,
     }),
+    
     WinstonModule.forRoot({
       level: 'info',
       format: winston.format.combine(
@@ -69,7 +82,7 @@ import * as winston from 'winston';
         }),
       ],
     }),
-    UserModule,
+
   ],
 
   controllers: [AppController],

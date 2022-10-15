@@ -6,15 +6,15 @@ import { AppService } from './app.service';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  @Get('tt')
+  // @Get('tt')
   // getHello(): string {
   //   return this.appService.getHello();
   // }
 
-  @Get('hi')
-  get():string{
-    return this.appService.get();
-  }
+  // @Get('hi')
+  // get():string{
+  //   return this.appService.get();
+  // }
 
 
 
