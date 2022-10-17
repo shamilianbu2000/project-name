@@ -120,15 +120,12 @@ export class UsersService {
     if (deleting) {
       return {
         success: true,
-
         data: deleting,
-
         message: 'Successfully deleted',
       };
     } else {
       return {
         success: false,
-
         message: 'someting went wrong',
       };
     }

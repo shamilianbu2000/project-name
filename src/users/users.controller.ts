@@ -130,7 +130,6 @@ export class UsersController {
           data: updateDetail,
         });
       } else {
-
       this.logger.warn('could not find user-users/put');
         res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
           success: false,
@@ -152,11 +151,11 @@ export class UsersController {
       let deleting = await this.usersService.remove(+id);
       console.log('------------------>', deleting);
       if (deleting.success) {
-        this.logger.error('successfuly deleted-users/delete');
+        this.logger.info('successfuly deleted-users/delete');
         return res.status(HttpStatus.OK).json({
           success: true,
           data: deleting,
-          message: deleting.message,
+     
         });
       } else {
         this.logger.warn('could not find user-users/delete');

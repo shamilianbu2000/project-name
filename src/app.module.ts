@@ -11,7 +11,8 @@ import { WinstonModule } from 'nest-winston';
 
 import * as winston from 'winston';
 import { Users } from './users/entities/user.entity';
-
+import { SignupModule } from './signup/signup.module';
+import { Signup } from './signup/entities/signup.entity';
 
 
 
@@ -34,10 +35,14 @@ import { Users } from './users/entities/user.entity';
       password: 'Password@123',
 
       database: 'nest',
+      // host: process.env.DATABASE_HOST,
+      // port: 3306,
+      // username: process.env.DATABASE_USER,
+      // password: process.env.DATABASE_PASSWORD,
+      // database: process.env.DATABASE_NAME,
+     entities:[Users,Employee,Signup],
 
-     entities:[Users,Employee],
-
-      synchronize: false,
+       synchronize: true,
     }),
 
     EmployeeModule,
@@ -52,13 +57,7 @@ import { Users } from './users/entities/user.entity';
         winston.format.errors(),
       ),
 
-      // level: "warn",
-      // format: winston.format.combine(
-      // winston.format.timestamp(),
-      // winston.format.json(),
-      // winston.format.colorize(),
-      // winston.format.errors()),
-
+  
       transports: [
         new winston.transports.Console(),
         new winston.transports.File({
@@ -85,6 +84,8 @@ import { Users } from './users/entities/user.entity';
         }),
       ],
     }),
+    
+    SignupModule,
 
   ],
 
