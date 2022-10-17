@@ -66,7 +66,7 @@ export class EmployeeService {
     let data = {
       // id: createEmployeeDto.id,
       name: createEmployeeDto.name,
-      isActive: true
+      isActive: true,
     };
 
     if (findingone == undefined) {
@@ -89,11 +89,12 @@ export class EmployeeService {
   //////////////////////put////////////////////////////////
   async update(id: number, createEmployeeDto: UpdateEmployeeDto) {
     let save = await this.rep.update(
-      { id:id },
-      {   
-        name: createEmployeeDto.name      }
+      { id: id },
+      {
+        name: createEmployeeDto.name,
+      },
     );
-  
+
     if (save) {
       return {
         success: true,
@@ -111,12 +112,11 @@ export class EmployeeService {
     }
   }
 
-
   //////////////////get//////////////////////////////////////////////////
   async findAll() {
-   let find = await this.rep.find();
-   console.log(find);
-   
+    let find = await this.rep.find();
+    console.log(find);
+
     if (find) {
       return {
         success: true,
@@ -133,10 +133,6 @@ export class EmployeeService {
       };
     }
   }
-
-
-
-
 
   async findOne(id: number) {
     let find = await this.rep.findOne({
@@ -168,15 +164,11 @@ export class EmployeeService {
 
   async removed(id: any) {
     let deleting = await this.rep.update({ id: id }, { isActive: true });
-
     console.log(deleting);
-
     if (deleting) {
       return {
         success: true,
-
         data: deleting,
-
         message: 'value get',
       };
     } else {
@@ -187,6 +179,4 @@ export class EmployeeService {
       };
     }
   }
-
- 
 }

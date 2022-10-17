@@ -83,13 +83,71 @@ export class UsersService {
     }
   }
    
+  
+
+  async update(id: number, createUserDto: UpdateUserDto) {
+    let save = await this.rep.update(
+      { id: id },
+      {
+        name: createUserDto.name,
+      },
+    );
+
+    if (save) {
+      return {
+        success: true,
+
+        data: save,
+
+        message: 'User data update success',
+      };
+    } else {
+      return {
+        success: false,
+
+        message: 'hi',
+      };
+    }
   }
 
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
 
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+
+  async remove(id: number) {
+    let deleting = await this.rep.update({ id: id }, { isActive: true });
+
+    console.log(deleting);
+
+    if (deleting) {
+      return {
+        success: true,
+
+        data: deleting,
+
+        message: 'Successfully deleted',
+      };
+    } else {
+      return {
+        success: false,
+
+        message: 'someting went wrong',
+      };
+    }
+  }
+
+ 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
