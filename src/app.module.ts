@@ -3,11 +3,10 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 // import { CommoentModule } from './commoent/commoent.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-// import { user } from './commoent/entities/commoent.entity';
 import { Repository } from 'typeorm';
 import { UsersModule } from "./users/users.module";
-// import { EmployeeModule } from './employee/employee.module';
-// import { Employee } from './employee/entities/employee.entity';
+ import { EmployeeModule } from './commoent/employee.module';
+ import { Employee } from './commoent/entities/employee.entity';
 import { WinstonModule } from 'nest-winston';
 
 import * as winston from 'winston';
@@ -17,6 +16,7 @@ import { Users } from './users/entities/user.entity';
 
 
 @Module({
+
 
 
 
@@ -35,10 +35,13 @@ import { Users } from './users/entities/user.entity';
 
       database: 'nest',
 
-     entities:[Users],
+     entities:[Users,Employee],
 
       synchronize: false,
     }),
+
+    EmployeeModule,
+    UsersModule,
     
     WinstonModule.forRoot({
       level: 'info',
