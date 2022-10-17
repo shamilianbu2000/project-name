@@ -12,7 +12,7 @@ export class SignupController {
   constructor(@Inject(WINSTON_MODULE_PROVIDER) private readonly logger: Logger,private readonly signupService: SignupService) {}
 
 @Post('signup')
-async signUp(@Body() createSignupDto:CreateSignupDto,@Res() res:Response){
+async signup(@Body() createSignupDto:CreateSignupDto,@Res() res:Response){
   try{
     let signUp = await this.signupService.signUp(createSignupDto)
     if (signUp.status) {
@@ -30,13 +30,16 @@ async signUp(@Body() createSignupDto:CreateSignupDto,@Res() res:Response){
     }
   }
   catch(error){
-    this.logger.error('Invalid Login', error);
+    console.log("asdfghjkl",error)
+    this.logger.error('Invalid signup', error);
     res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
       success: false,
       message: 'Invalid Login. Try again',
     });
   }
   
+
+}
 
 }
 

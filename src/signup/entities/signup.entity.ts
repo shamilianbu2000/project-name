@@ -13,11 +13,13 @@ export class Signup {
     @Column()
     name: string;
 
+    @Column({ default:null })
+    token:string;
 
      @Column()
      email: string;
   
-    @Column({ default: true })
+    @Column({ default: false })
     isActive: boolean;
   
     @CreateDateColumn()

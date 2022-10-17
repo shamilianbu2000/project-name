@@ -6,7 +6,7 @@ import { IsEmail, IsNotEmpty, Length } from 'class-validator';
 
 export class CreateSignupDto {
 
- 
+  
     @ApiProperty()
     @IsNotEmpty()
     @Length(3,8)
@@ -18,9 +18,7 @@ export class CreateSignupDto {
     @IsEmail()
     email:string;
    
-    @ApiProperty()
-    @IsNotEmpty()
-    token:string;
+ 
    
 
 
