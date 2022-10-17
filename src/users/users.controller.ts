@@ -116,23 +116,29 @@ export class UsersController {
     @Res() res: Response,
   ) {
     try {
+
       let updateDetail = await this.usersService.update(
         id,
         createUsersDto,
       );
 
       if (updateDetail.success) {
+        
+      this.logger.info('successfuly updated-users/put');
         res.status(HttpStatus.OK).json({
           success: true,
           data: updateDetail,
         });
       } else {
+
+      this.logger.warn('could not find user-users/put');
         res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
           success: false,
           message: updateDetail.message,
         });
       }
     } catch (error) {
+      this.logger.error('error occured-users/put');
       res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
         success: false,
         message: 'something went wrong',
