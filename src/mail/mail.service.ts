@@ -7,6 +7,7 @@ export class MailService {
   /** */
   async sendUserConfirmation(user: any, token: string) {
     const url = `=http://localhost:3000/verifyingEmail/${token}`;
+    console.log("mail sent");
     await this.mailerService.sendMail({
       to: user.email,
       from: 'shamilyanbu2000@gmail.com',

@@ -6,7 +6,8 @@ import { CreateSignupDto } from './dto/create-signup.dto';
 import { UpdateSignupDto } from './dto/update-signup.dto';
 import { Signup } from './entities/signup.entity';
 import { JwtService } from '@nestjs/jwt';
-import { MailService } from 'src/mail/mail.service'; 
+import { MailService } from 'src/mail/mail.service';
+import * as bcrypt from 'bcryptjs';
 
 
 @Injectable()
@@ -19,7 +20,10 @@ export class SignupService {
   ) {}
 
   async signUp(createSignupDto: CreateSignupDto) {
-    let data = { name: createSignupDto.name, email: createSignupDto.email };
+    const password = createSignupDto.password;
+    const saltOrRounds = 10;
+    const hash = await bcrypt.hash(password, saltOrRounds);
+    let data = { name: createSignupDto.name, email: createSignupDto.email,password:hash};
     if (data) {
       let checkMail = await this.rep.findOne({
         select: ['id', 'name', 'email'],
@@ -46,9 +50,8 @@ export class SignupService {
          { token :generateToken }
       );
 
-
       await this.mailService.sendUserConfirmation(createSignupDto,generateToken);
-      console.log("mail sent");
+     
     
       return {
         status: true,
@@ -63,4 +66,24 @@ export class SignupService {
       
     }
         
-  }}  
+  }
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}  

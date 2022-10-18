@@ -4,6 +4,7 @@ import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'path';
 
+
 @Module({
   imports: [
   MailerModule.forRoot({
@@ -22,7 +23,7 @@ import { join } from 'path';
     },
     template: {
       dir: join(__dirname, 'Templates'),
-      adapter: new HandlebarsAdapter(), // or new PugAdapter() or new EjsAdapter()
+      adapter: new HandlebarsAdapter(), 
       options: {
         strict: true,
       },

@@ -32,4 +32,9 @@ export class Signup {
     deletedAt: Date;
     length: number;
 
+
+    @Column()
+    password:string;
+
+
 }

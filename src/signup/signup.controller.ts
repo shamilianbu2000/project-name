@@ -1,10 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Res, HttpStatus } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Inject, Res, HttpStatus, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { SignupService } from './signup.service';
 import { CreateSignupDto } from './dto/create-signup.dto';
 import { UpdateSignupDto } from './dto/update-signup.dto';
 import { Response, request } from 'express';
 import { WINSTON_MODULE_PROVIDER } from 'nest-winston';
 import { Logger } from 'winston';
+import { FileInterceptor } from '@nestjs/platform-express/multer';
 
 
 @Controller('signup')
@@ -40,6 +41,14 @@ async signup(@Body() createSignupDto:CreateSignupDto,@Res() res:Response){
   
 
 }
+
+
+@Post('uploadfile')
+@UseInterceptors(FileInterceptor('file',{dest:'src/pics'}))
+uploadFile(@UploadedFile() file: Express.Multer.File) {
+  console.log(file);
+}
+
 
 }
 
