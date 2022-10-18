@@ -1,40 +1,43 @@
-
-
-import { createContextId } from "@nestjs/core";
-import { createTracing } from "trace_events";
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { createContextId } from '@nestjs/core';
+import { createTracing } from 'trace_events';
+import {
+  Column,
+  CreateDateColumn,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 
 @Entity('signup')
 export class Signup {
-    
-    @PrimaryGeneratedColumn()
-    id: number;
-  
-    @Column()
-    name: string;
+  @PrimaryGeneratedColumn()
+  id: number;
 
-    @Column({ default:null })
-    token:string;
+  @Column({ default: null })
+  name: string;
 
-     @Column()
-     email: string;
-  
-    @Column({ default: false })
-    isActive: boolean;
-  
-    @CreateDateColumn()
-    createdAt: Date;
-  
-    @UpdateDateColumn()
-    updatedAt: Date;
-  
-    @DeleteDateColumn()
-    deletedAt: Date;
-    length: number;
+  @Column({ default: null })
+  token: string;
 
+  @Column({nullable:true})
+  email: string;
 
-    @Column()
-    password:string;
+  @Column({ default: false })
+  isActive: boolean;
 
+  @CreateDateColumn({ default: null })
+  createdAt: Date;
 
+  @UpdateDateColumn({ default: null })
+  updatedAt: Date;
+
+  @DeleteDateColumn({ default: null })
+  deletedAt: Date;
+  length: number;
+
+  @Column({ default: null })
+  password: string;
+  @Column()
+  img: string;
 }

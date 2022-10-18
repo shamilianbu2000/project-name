@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UploadedFile } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { identity } from 'rxjs';
 import { Repository } from 'typeorm';
@@ -8,6 +8,8 @@ import { Signup } from './entities/signup.entity';
 import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/mail/mail.service';
 import * as bcrypt from 'bcryptjs';
+import { config } from 'process';
+import * as AWS from "aws-sdk";
 
 
 @Injectable()
@@ -66,12 +68,46 @@ export class SignupService {
       
     }
         
+
+
   }
 
  
 
 
 
+  async uploadFile(databuffer:Buffer,filename:string,filemetatype:string){
+    try{
+      AWS.config.update({
+       accessKeyId : 'AKIAVNJBABBZL5KKHZF7' ,
+
+        secretAccessKey : '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'
+
+      })
+      const s3 =new AWS.S3()
+const uploadResult=await s3.upload({
+  Bucket: 'expensetracker-bucket' ,
+  Key: filename,
+  Body: databuffer,
+  ContentType: filemetatype,
+}).promise()
+      
+  return{
+    key:uploadResult.Key,
+    url:uploadResult.Location
+  }
+      
+    }
+
+
+    catch{
+
+    }
+  }
+
+  async addImage(data){
+    return this.rep.save(data)
+  }
 
 
 
