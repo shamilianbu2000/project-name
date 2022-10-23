@@ -8,6 +8,7 @@ import { Logger } from 'winston';
 import { FileInterceptor } from '@nestjs/platform-express/multer';
 import * as AWS from "aws-sdk";
 import { url } from 'inspector';
+import s3Storage = require("multer-sharp-s3");
 
 
 @Controller('signup')
@@ -83,16 +84,11 @@ const uploadfile = await this.signupService.uploadFile(
     file.mimetype
 )
 console.log('upload',uploadfile);
-let data = {img:uploadfile.url}
+let url = uploadfile.url
+let geturl= await this.signupService.getAttachmentImage(url)
+let data = {img:geturl}
 let upload= await this.signupService.addImage(data)
-
- 
-
-
 }
- 
- 
- 
 
 
 }

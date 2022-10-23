@@ -40,7 +40,7 @@ import { join} from 'path';
       // database: process.env.DATABASE_NAME,
       entities: [Users, Employee, Signup],
 
-       synchronize: true,
+       //synchronize: true,
     }),
 
  

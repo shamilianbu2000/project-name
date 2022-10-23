@@ -38,6 +38,7 @@ export class Signup {
 
   @Column({ default: null })
   password: string;
+  
   @Column()
   img: string;
 }

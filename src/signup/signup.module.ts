@@ -12,7 +12,7 @@ import { MailService } from 'src/mail/mail.service';
     TypeOrmModule.forFeature([Signup]),
     JwtModule.register({
       secret: 'secretKey',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '3660s' },
     }),
   ],
 

@@ -9,8 +9,8 @@ import { JwtService } from '@nestjs/jwt';
 import { MailService } from 'src/mail/mail.service';
 import * as bcrypt from 'bcryptjs';
 import { config } from 'process';
-import * as AWS from "aws-sdk";
-
+import * as AWS from 'aws-sdk';
+import s3Storage = require('multer-sharp-s3');
 
 @Injectable()
 export class SignupService {
@@ -25,7 +25,11 @@ export class SignupService {
     const password = createSignupDto.password;
     const saltOrRounds = 10;
     const hash = await bcrypt.hash(password, saltOrRounds);
-    let data = { name: createSignupDto.name, email: createSignupDto.email,password:hash};
+    let data = {
+      name: createSignupDto.name,
+      email: createSignupDto.email,
+      password: hash,
+    };
     if (data) {
       let checkMail = await this.rep.findOne({
         select: ['id', 'name', 'email'],
@@ -36,90 +40,94 @@ export class SignupService {
         let createUser = await this.rep.save(data);
         let userDataEmail = await this.rep.findOne({
           select: ['id', 'name', 'email'],
-          where: { email: createSignupDto.email }})
-         
-    
-      let payload = { id:userDataEmail.id, email: userDataEmail.email };
+          where: { email: createSignupDto.email },
+        });
 
-      console.log(payload);
-      
+        let payload = { id: userDataEmail.id, email: userDataEmail.email };
 
-      let generateToken = this.jwtService.sign(payload);
+        console.log(payload);
 
-      console.log(generateToken);
-      let updateToken = await this.rep.update(
-        { id:userDataEmail.id },
-         { token :generateToken }
-      );
+        let generateToken = this.jwtService.sign(payload);
 
-      await this.mailService.sendUserConfirmation(createSignupDto,generateToken);
-     
-    
+        console.log(generateToken);
+        let updateToken = await this.rep.update(
+          { id: userDataEmail.id },
+          { token: generateToken },
+        );
+
+        await this.mailService.sendUserConfirmation(
+          createSignupDto,
+          generateToken,
+        );
+
+        return {
+          status: true,
+          message: 'Signed Up Successfully And Check Your Mail And Verify It',
+        };
+      }
       return {
-        status: true,
-        message: 'Signed Up Successfully And Check Your Mail And Verify It',
-      }       
-
+        status: false,
+        message: 'user already exist',
+      };
     }
-          return{
-            status:false,
-            message:'user already exist'
-          }
-      
-    }
-        
-
-
   }
 
- 
-
-
-
-  async uploadFile(databuffer:Buffer,filename:string,filemetatype:string){
-    try{
+  async uploadFile(databuffer: Buffer, filename: string, filemetatype: string) {
+    try {
       AWS.config.update({
-       accessKeyId : 'AKIAVNJBABBZL5KKHZF7' ,
+        accessKeyId: 'AKIAVNJBABBZL5KKHZF7',
 
-        secretAccessKey : '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'
+        secretAccessKey: 'w7P5Rf9unu9DOyCueba3MrfGmHOxTMd2YgRnQ9N1',
+      });
+      const s3 = new AWS.S3();
+      const uploadResult = await s3
+        .upload({
+          Bucket: 'expensetracker-bucket',
+          Key: filename,
+          Body: databuffer,
+          ContentType: filemetatype,
+        })
+        .promise();
 
-      })
-      const s3 =new AWS.S3()
-const uploadResult=await s3.upload({
-  Bucket: 'expensetracker-bucket' ,
-  Key: filename,
-  Body: databuffer,
-  ContentType: filemetatype,
-}).promise()
-      
-  return{
-    key:uploadResult.Key,
-    url:uploadResult.Location
-  }
-      
-    }
-
-
-    catch{
-
+      return {
+        key: uploadResult.Key,
+        url: uploadResult.Location,
+      };
+    } catch (error) {
+      console.error(`Failed to set AWS Config ${error}`);
     }
   }
 
-  async addImage(data){
-    return this.rep.save(data)
+  getAttachmentImage(key) {
+    const params = {
+      Key: key,
+
+      Bucket:'expensetracker-bucket',
+
+      Expires: 60 * 10,
+    };
+
+    const signedUrlExpireSeconds = 60 * 10;
+
+    return new Promise(async (resolve, reject) => {
+      try {
+        const s3 = new AWS.S3();
+
+        const url = await new Promise((resolve, reject) => {
+          s3.getSignedUrl('getObject', params, (err, url) => {
+            err ? reject(err) : resolve(url);
+          });
+        });
+
+        resolve(url);
+      } catch (err) {
+        if (err) {
+          reject(err);
+        }
+      }
+    });
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}  
+  async addImage(data) {
+    return this.rep.save(data);
+  }
+}
